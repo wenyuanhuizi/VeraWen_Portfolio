@@ -8,7 +8,6 @@ interface Props {
 const NAV_ITEMS: { id: Page; label: string }[] = [
   { id: 'intro',      label: 'Introduction' },
   { id: 'projects',   label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
   { id: 'about',      label: 'About Me' },
 ]
 
@@ -40,7 +39,7 @@ export default function Navbar({ current, onNavigate }: Props) {
           color: '#fff', fontWeight: 800, fontSize: '.9rem', letterSpacing: '-.5px',
         }}>VW</div>
         <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text)', letterSpacing: '-.3px' }}>
-          Wenyuan
+          Vera Wen
         </span>
       </button>
 

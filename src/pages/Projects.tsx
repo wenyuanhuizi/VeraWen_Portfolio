@@ -1,17 +1,147 @@
+/// <reference types="vite/client" />
+import { useState } from 'react'
+
+const SAIKAWA_IMAGES = [
+  'display1.png',
+  'display2.png',
+  'display3.png',
+  'display4.png',
+  'display5.png',
+]
+
+function SaikawaGallery({ color, statusColor, status }: { color: string; statusColor: string; status: string }) {
+  const [idx, setIdx] = useState(0)
+  const base = import.meta.env.BASE_URL
+
+  const prev = () => setIdx(i => (i - 1 + SAIKAWA_IMAGES.length) % SAIKAWA_IMAGES.length)
+  const next = () => setIdx(i => (i + 1) % SAIKAWA_IMAGES.length)
+
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      gap: 14, padding: '32px 24px', position: 'relative', overflow: 'hidden',
+    }}>
+      {/* Image */}
+      <div style={{
+        width: '100%', maxWidth: 300,
+        borderRadius: 16,
+        overflow: 'hidden',
+        boxShadow: `0 16px 40px ${color}40`,
+        background: '#fff',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <img
+          src={`${base}saikawa/${SAIKAWA_IMAGES[idx]}`}
+          alt={`Saikawa screenshot ${idx + 1}`}
+          style={{ width: '100%', height: 'auto', objectFit: 'contain', display: 'block' }}
+        />
+      </div>
+
+      {/* Prev / Next */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <button onClick={prev} style={{
+          width: 32, height: 32, borderRadius: '50%', border: `1.5px solid ${color}40`,
+          background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color, boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        {/* Dots */}
+        <div style={{ display: 'flex', gap: 6 }}>
+          {SAIKAWA_IMAGES.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: i === idx ? 18 : 6, height: 6, borderRadius: 100,
+              background: i === idx ? color : `${color}40`,
+              border: 'none', cursor: 'pointer', padding: 0,
+              transition: 'all .2s',
+            }}/>
+          ))}
+        </div>
+
+        <button onClick={next} style={{
+          width: 32, height: 32, borderRadius: '50%', border: `1.5px solid ${color}40`,
+          background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color, boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      {/* Status badge */}
+      <span style={{
+        fontSize: '.75rem', fontWeight: 700, textTransform: 'uppercase',
+        letterSpacing: '1px', color: statusColor,
+        background: `${statusColor}18`, padding: '4px 12px', borderRadius: 100,
+        border: `1px solid ${statusColor}30`,
+      }}>
+        ● {status}
+      </span>
+    </div>
+  )
+}
+
 const PROJECTS = [
+   {
+    id: 'saikawa',
+    name: 'Saikawa Lab App',
+    tagline: 'A full-stack platform for environmental data and lab engagement.',
+    description:
+      'Independently designed and built a full-stack iOS application for Emory University’s largest environmental science research group. The platform centralizes real-time air quality data, lab communications, and user engagement into a single mobile experience, replacing fragmented web and manual workflows.',
+    highlights: [
+      'Built end-to-end system with React Native frontend and Express.js backend',
+      'Real-time air quality data visualization with integrated bias-correction models',
+      'Event feed and calendar system with push notification support',
+      'User reporting and admin dashboard for managing data and community input',
+      'Deployed backend services on AWS and Google Cloud with production monitoring',
+      'Translated research needs into scalable product features through direct collaboration with non-technical stakeholders',
+    ],
+    tech: [
+      'React Native',
+      'Express.js',
+      'Node.js',
+      'AWS (RDS)',
+      'Google Cloud App Engine',
+      'MySQL',
+      'Swagger/OpenAPI'
+    ],
+    color: '#0369a1',
+    gradient: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
+    accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)',
+    demo: 'https://drive.google.com/file/d/1cK4vOXYUMuMfadp8ABI2ZVHiUX6xDLVj/view?usp=sharing',
+    status: 'In Apple Store Review Process',
+    statusColor: '#059669',
+  },
+
   {
     id: 'medease',
     name: 'MedEase',
-    tagline: 'Simplifying healthcare, one interaction at a time.',
+    tagline: 'An AI-powered aftercare agent for patient support and coordination.',
     description:
-      'MedEase is a full-stack health-tech application designed to streamline patient–provider communication and reduce friction in the healthcare experience. It features an AI-assisted symptom triage system, appointment scheduling, real-time messaging, and a personalised health dashboard — all in a HIPAA-conscious architecture.',
+      'MedEase is an AI-driven platform designed to simplify post-treatment care by helping patients understand medical information and manage next steps. I founded and led the development of the system, designing end-to-end architecture and building backend services that integrate LLMs, real-time communication, and external healthcare workflows.',
     highlights: [
-      'AI-driven symptom triage with GPT-based recommendations',
-      'Real-time patient–provider chat with end-to-end encryption',
-      'Dynamic appointment scheduling with calendar integration',
-      'Personalised health dashboard with vitals tracking',
+      'Designed and implemented backend architecture using FastAPI with 40+ RESTful APIs',
+      'Built AI pipelines for medical report simplification using GPT-4o, T5-Large, and DeepSeek',
+      'Developed real-time medication assistance agent with WebSocket-based interaction',
+      'Integrated external services (Google Calendar, Maps, Gmail) via OAuth 2.0',
+      'Orchestrated multi-service workflows to support patient aftercare coordination',
+      'Led a team of 3 engineers, managing agile sprints and iterative product delivery',
     ],
-    tech: ['React Native', 'Node.js', 'PostgreSQL', 'OpenAI API', 'Socket.io', 'AWS'],
+    tech: [
+      'FastAPI',
+      'Python',
+      'MongoDB',
+      'AWS S3',
+      'WebSockets',
+      'OAuth 2.0',
+      'OpenAI (GPT-4o, GPT-4o mini)',
+      'T5-Large',
+      'DeepSeek'
+    ],
+    impact:
+      'Combined AI agent architecture with full-stack system design to build a scalable healthcare platform focused on real-world patient support.',
     color: '#7c3aed',
     gradient: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)',
     accentGradient: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
@@ -21,30 +151,7 @@ const PROJECTS = [
     status: 'In Development',
     statusColor: '#7c3aed',
   },
-  {
-    id: 'saikawa',
-    name: 'Saikawa Lab App',
-    tagline: 'Digitising environmental research workflows.',
-    description:
-      'A cross-platform mobile application built for the Saikawa Lab at Emory University to digitise and streamline environmental data collection in the field. The app replaces paper-based processes, enabling researchers to log air quality samples, GPS-tagged observations, and lab notes — all synced to a central database.',
-    highlights: [
-      'Offline-first architecture for remote field data collection',
-      'GPS-tagged sample logging with map visualisation',
-      'Firebase real-time sync for multi-researcher collaboration',
-      'Custom data export pipeline for research analysis tools',
-    ],
-    tech: ['Flutter', 'Dart', 'Firebase', 'Google Maps API', 'Python', 'GIS'],
-    color: '#0369a1',
-    gradient: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
-    accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)',
-    emoji: '🔬',
-    github: 'https://github.com/',
-    demo: '#',
-    status: 'Deployed',
-    statusColor: '#059669',
-  },
 ]
-
 function TechBadge({ label, color }: { label: string; color: string }) {
   return (
     <span style={{
@@ -154,13 +261,6 @@ export default function Projects() {
 
                 {/* Links */}
                 <div style={{ display: 'flex', gap: 12 }}>
-                  <a href={p.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline"
-                    style={{ borderColor: p.color, color: p.color, fontSize: '.8rem', padding: '8px 18px' }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
-                    </svg>
-                    GitHub
-                  </a>
                   {p.demo !== '#' && (
                     <a href={p.demo} target="_blank" rel="noopener noreferrer" className="btn btn-primary"
                       style={{ background: p.accentGradient, fontSize: '.8rem', padding: '8px 18px' }}>
@@ -172,30 +272,32 @@ export default function Projects() {
 
               {/* Visual panel (right side for even items) */}
               {i % 2 === 0 && (
-                <div style={{
-                  background: p.gradient,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexDirection: 'column', gap: 16, padding: 40,
-                  order: 1,
-                }}>
-                  <div style={{
-                    width: 100, height: 100, borderRadius: 24,
-                    background: p.accentGradient,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '3rem',
-                    boxShadow: `0 16px 40px ${p.color}40`,
-                  }}>
-                    {p.emoji}
-                  </div>
-                  <span style={{
-                    fontSize: '.75rem', fontWeight: 700, textTransform: 'uppercase',
-                    letterSpacing: '1px', color: p.statusColor,
-                    background: `${p.statusColor}18`, padding: '4px 12px', borderRadius: 100,
-                    border: `1px solid ${p.statusColor}30`,
-                  }}>
-                    ● {p.status}
-                  </span>
-                </div>
+                p.id === 'saikawa'
+                  ? <SaikawaGallery color={p.color} statusColor={p.statusColor} status={p.status} />
+                  : <div style={{
+                      background: p.gradient,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexDirection: 'column', gap: 16, padding: 40,
+                      order: 1,
+                    }}>
+                      <div style={{
+                        width: 100, height: 100, borderRadius: 24,
+                        background: p.accentGradient,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '3rem',
+                        boxShadow: `0 16px 40px ${p.color}40`,
+                      }}>
+                        {p.emoji}
+                      </div>
+                      <span style={{
+                        fontSize: '.75rem', fontWeight: 700, textTransform: 'uppercase',
+                        letterSpacing: '1px', color: p.statusColor,
+                        background: `${p.statusColor}18`, padding: '4px 12px', borderRadius: 100,
+                        border: `1px solid ${p.statusColor}30`,
+                      }}>
+                        ● {p.status}
+                      </span>
+                    </div>
               )}
             </div>
           </div>

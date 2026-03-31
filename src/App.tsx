@@ -2,10 +2,9 @@ import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Introduction from './pages/Introduction'
 import Projects from './pages/Projects'
-import Experience from './pages/Experience'
 import AboutMe from './pages/AboutMe'
 
-export type Page = 'intro' | 'projects' | 'experience' | 'about'
+export type Page = 'intro' | 'projects' | 'about'
 
 export default function App() {
   const [page, setPage] = useState<Page>('intro')
@@ -23,7 +22,6 @@ export default function App() {
       <div key={key} className="page" style={{ paddingTop: 'var(--nav-h)' }}>
         {page === 'intro'      && <Introduction onNavigate={navigate} />}
         {page === 'projects'   && <Projects />}
-        {page === 'experience' && <Experience />}
         {page === 'about'      && <AboutMe />}
       </div>
     </div>

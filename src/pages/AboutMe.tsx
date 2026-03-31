@@ -135,7 +135,7 @@ export default function AboutMe() {
         {/* Stats */}
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14 }}>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 700 }}>wenyuan.v</h2>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 700 }}>vera.wen</h2>
           </div>
           <div style={{ display: 'flex', gap: 32, marginBottom: 14 }}>
             {[['12', 'posts'], ['847', 'followers'], ['312', 'following']].map(([n, l]) => (

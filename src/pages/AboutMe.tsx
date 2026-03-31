@@ -1,240 +1,389 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
-type Category = 'All' | 'Art' | 'Dance' | 'Life'
+const BASE = '/VeraWen_Portfolio'
 
-interface Post {
-  id: number
-  category: Category
+type Category = 'Dance' | 'Painting' | 'Sculpture' | 'Sports'
+
+interface HobbyData {
+  label: Category
   emoji: string
-  caption: string
-  gradient: string
-  likes: number
-  tag: string
+  color: string
+  accent: string
+  images: string[]
+  passion: string
+  tags: string[]
 }
 
-const POSTS: Post[] = [
+const HOBBIES: HobbyData[] = [
   {
-    id: 1, category: 'Art', emoji: '🎨',
-    caption: 'Watercolour experiments — playing with negative space and soft washes.',
-    gradient: 'linear-gradient(135deg, #fce7f3, #fbcfe8, #f9a8d4)',
-    likes: 142, tag: '#watercolour',
+    label: 'Dance',
+    emoji: '💃',
+    color: '#D4A843',
+    accent: 'rgba(212,168,67,0.06)',
+    images: ['dance1.jpeg', 'dance2.jpeg', 'dance3.jpeg', 'dance4.jpeg'].map(f => `${BASE}/hobby/dance/${f}`),
+    passion: `Dance is one of my deepest passions — it's the language I speak when words aren't enough. Whether it's the precision of choreography or the freedom of freestyle, every style teaches me something new about myself. I've performed in cultural showcases, hip-hop events, and contemporary pieces, and each experience pushes me to connect more deeply with both the music and the audience. Movement is where I find flow.`,
+    tags: ['#contemporary', '#hiphop', '#freestyle', '#performance'],
   },
   {
-    id: 2, category: 'Dance', emoji: '💃',
-    caption: "Contemporary piece from last semester's showcase — movement as emotion.",
-    gradient: 'linear-gradient(135deg, #ede9fe, #c4b5fd, #a78bfa)',
-    likes: 218, tag: '#contemporary',
+    label: 'Painting',
+    emoji: '🎨',
+    color: '#F5DFA0',
+    accent: 'rgba(245,223,160,0.06)',
+    images: ['painting1.jpeg', 'painting2.jpeg', 'painting3.jpeg', 'painting4.jpeg'].map(f => `${BASE}/hobby/painting/${f}`),
+    passion: `Painting is my meditation. I'm drawn to watercolour for its unpredictability — the way pigment bleeds into water feels like a conversation rather than a command. I love experimenting with negative space, layering soft washes to build depth, and finding the balance between intention and happy accident. Each piece is a little world I get to step into and explore.`,
+    tags: ['#watercolour', '#illustration', '#botanicalart', '#expressionism'],
   },
   {
-    id: 3, category: 'Life', emoji: '☕',
-    caption: 'Sunday mornings: coffee, lo-fi beats, and a blank sketchbook.',
-    gradient: 'linear-gradient(135deg, #fef3c7, #fde68a, #fbbf24)',
-    likes: 97, tag: '#sundayvibes',
+    label: 'Sculpture',
+    emoji: '🏺',
+    color: '#A07828',
+    accent: 'rgba(160,120,40,0.08)',
+    images: ['sculpture1.jpeg','sculpture2.jpeg','sculpture3.jpeg','sculpture4.jpeg','sculpture5.jpeg','sculpture6.jpeg','sculpture7.jpeg'].map(f => `${BASE}/hobby/sculpture/${f}`),
+    passion: `Sculpture gives me something that 2D art never quite does — a physical presence you can walk around, touch, and experience from every angle. Working with clay grounds me in a way that's hard to describe. I love the intimacy of shaping something with my hands, feeling the material push back. It's humbling, tactile, and endlessly surprising. My pieces tend to blend organic form with abstract emotion.`,
+    tags: ['#ceramics', '#clay', '#3dart', '#handbuilt'],
   },
   {
-    id: 4, category: 'Art', emoji: '✏️',
-    caption: 'Portrait sketching series — capturing quiet moments in line work.',
-    gradient: 'linear-gradient(135deg, #d1fae5, #a7f3d0, #6ee7b7)',
-    likes: 183, tag: '#portraitart',
-  },
-  {
-    id: 5, category: 'Dance', emoji: '🕺',
-    caption: 'Freestyle session after a long coding sprint. Nothing clears the head like movement.',
-    gradient: 'linear-gradient(135deg, #dbeafe, #bfdbfe, #93c5fd)',
-    likes: 264, tag: '#freestyle',
-  },
-  {
-    id: 6, category: 'Life', emoji: '🌿',
-    caption: 'My little plant corner — green friends make the best debugging companions.',
-    gradient: 'linear-gradient(135deg, #f0fdf4, #bbf7d0, #86efac)',
-    likes: 79, tag: '#plantlife',
-  },
-  {
-    id: 7, category: 'Art', emoji: '🖼️',
-    caption: 'Digital illustration — exploring the aesthetic of quiet city nights.',
-    gradient: 'linear-gradient(135deg, #1e1b4b, #312e81, #4338ca)',
-    likes: 310, tag: '#digitalart',
-  },
-  {
-    id: 8, category: 'Dance', emoji: '🎵',
-    caption: 'Dance rehearsal clip — hip-hop choreography we performed at the cultural showcase.',
-    gradient: 'linear-gradient(135deg, #fdf2f8, #fce7f3, #f9a8d4)',
-    likes: 195, tag: '#hiphop',
-  },
-  {
-    id: 9, category: 'Life', emoji: '📚',
-    caption: 'Reading stack this month: design thinking, AI ethics, and a bit of poetry.',
-    gradient: 'linear-gradient(135deg, #fff7ed, #fed7aa, #fb923c)',
-    likes: 112, tag: '#bookclub',
-  },
-  {
-    id: 10, category: 'Art', emoji: '🌸',
-    caption: 'Botanical illustration — finding meditative calm in detailed ink work.',
-    gradient: 'linear-gradient(135deg, #fdf4ff, #f0abfc, #e879f9)',
-    likes: 227, tag: '#illustration',
-  },
-  {
-    id: 11, category: 'Dance', emoji: '🌟',
-    caption: 'Year-end performance — Korean traditional dance with modern flair.',
-    gradient: 'linear-gradient(135deg, #fffbeb, #fde68a, #f59e0b)',
-    likes: 341, tag: '#performance',
-  },
-  {
-    id: 12, category: 'Life', emoji: '🎮',
-    caption: 'Game night with the crew — competitive Mahjong and terrible decisions.',
-    gradient: 'linear-gradient(135deg, #ecfdf5, #a7f3d0, #34d399)',
-    likes: 88, tag: '#gamenights',
+    label: 'Sports',
+    emoji: '🏃‍♀️',
+    color: '#C8A050',
+    accent: 'rgba(200,160,80,0.06)',
+    images: ['sport1.jpeg','sport2.jpeg','sport3.jpeg','sport4.jpeg','sport5.jpeg','sport6.jpeg','sport7.jpeg'].map(f => `${BASE}/hobby/sports/${f}`),
+    passion: `Sport is my reset button. It clears the mental clutter that builds up after long coding sessions and fills me with a different kind of energy — physical, competitive, and communal. I believe that athletic discipline directly sharpens my focus as a developer. Whether it's pushing through a tough run or playing as part of a team, sport teaches me grit, consistency, and the value of showing up even when it's hard.`,
+    tags: ['#athletics', '#teamwork', '#active', '#mindandbody'],
   },
 ]
 
-const CATS: Category[] = ['All', 'Art', 'Dance', 'Life']
-const CAT_COLORS: Record<Category, string> = {
-  All: '#7c3aed', Art: '#ec4899', Dance: '#8b5cf6', Life: '#f59e0b',
-}
-
-function HeartIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-    </svg>
-  )
-}
-
 export default function AboutMe() {
-  const [active, setActive] = useState<Category>('All')
+  const [active, setActive] = useState<Category>('Dance')
+  const [lightbox, setLightbox] = useState<number | null>(null)
+  const [avatarZoomed, setAvatarZoomed] = useState(false)
+  const hobby = HOBBIES.find(h => h.label === active)!
 
-  const filtered = active === 'All' ? POSTS : POSTS.filter(p => p.category === active)
+  function switchCat(cat: Category) {
+    if (cat === active) return
+    setActive(cat)
+  }
+
+  // Keyboard nav for lightbox
+  const handleKey = useCallback((e: KeyboardEvent) => {
+    if (lightbox === null) return
+    if (e.key === 'ArrowRight') setLightbox(i => Math.min((i ?? 0) + 1, hobby.images.length - 1))
+    if (e.key === 'ArrowLeft')  setLightbox(i => Math.max((i ?? 0) - 1, 0))
+    if (e.key === 'Escape')     setLightbox(null)
+  }, [lightbox, hobby.images.length])
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [handleKey])
+
+  // Close lightbox when category changes
+  useEffect(() => { setLightbox(null) }, [active])
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: '72px 16px 80px' }}>
+    <div style={{ maxWidth: 860, margin: '0 auto', padding: '72px 16px 100px' }}>
 
       {/* ── Profile header ── */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 48,
-        marginBottom: 40,
-        padding: '0 8px',
-      }}>
-        {/* Avatar */}
-        <div style={{
-          width: 96, height: 96, borderRadius: '50%', flexShrink: 0,
-          background: 'linear-gradient(135deg, #7c3aed, #f9a8d4, #f59e0b)',
-          padding: 3,
-        }}>
-          <div style={{
-            width: '100%', height: '100%', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ede9fe, #c4b5fd)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '2.2rem',
-          }}>
-            🌸
-          </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 40, marginBottom: 48, padding: '0 8px' }}>
+        <div
+          onClick={() => setAvatarZoomed(true)}
+          style={{
+            width: 100, height: 100, borderRadius: '50%', flexShrink: 0,
+            background: 'linear-gradient(135deg, #7c3aed, #f9a8d4, #f59e0b)',
+            padding: 3, cursor: 'zoom-in',
+            transition: 'transform .2s, box-shadow .2s',
+            boxShadow: '0 4px 20px rgba(212,168,67,0.25)',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.07)'
+            ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 32px rgba(124,58,237,0.4)'
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)'
+            ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(212,168,67,0.25)'
+          }}
+        >
+          <img
+            src={`${BASE}/aboutMe/aboutmeprofile.jpeg`}
+            alt="Vera Wen"
+            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', display: 'block' }}
+          />
         </div>
-
-        {/* Stats */}
         <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14 }}>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 700 }}>vera.wen</h2>
-          </div>
-          <div style={{ display: 'flex', gap: 32, marginBottom: 14 }}>
-            {[['12', 'posts'], ['847', 'followers'], ['312', 'following']].map(([n, l]) => (
-              <div key={l} style={{ textAlign: 'center' }}>
-                <div style={{ fontWeight: 700, fontSize: '1rem' }}>{n}</div>
-                <div style={{ fontSize: '.78rem', color: 'var(--muted)' }}>{l}</div>
-              </div>
-            ))}
-          </div>
-          <p style={{ fontSize: '.875rem', lineHeight: 1.6, color: '#374151', maxWidth: 340 }}>
-            <strong>Wenyuan ✨</strong><br/>
-            Coder · Artist · Dancer<br/>
-            Finding beauty in every form — digital and analog<br/>
-            <span style={{ color: 'var(--primary)' }}>#artlife #techlife #dancelife</span>
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 10 }}>vera.wen</h2>
+          <p style={{ fontSize: '.9rem', lineHeight: 1.75, color: '#B0A898', maxWidth: 480 }}>
+            I'm really passionate about art and being creative in other forms, getting inspiration from people connection and life exploration. I like to learn from art and sport — two very different types of inspiration — and I also love interacting with people for another kind of spark.
           </p>
         </div>
       </div>
 
-      {/* Divider */}
-      <div style={{ borderTop: '1px solid var(--border)', marginBottom: 20 }} />
+      <div style={{ borderTop: '1px solid var(--border)', marginBottom: 36 }} />
 
-      {/* ── Passion blurbs ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 36 }}>
-        {[
-          { icon: '🎨', title: 'Art', desc: 'Watercolour, illustration & digital art — I love getting lost in colour and form.' },
-          { icon: '💃', title: 'Dance', desc: 'Contemporary, hip-hop, and traditional — movement is my favourite language.' },
-          { icon: '🌏', title: 'Life', desc: 'Plants, books, food adventures, and game nights with the people I love.' },
-        ].map(b => (
-          <div key={b.title} style={{
-            background: 'var(--surface)',
-            borderRadius: 'var(--radius)',
-            padding: '20px',
-            textAlign: 'center',
-            border: '1px solid var(--border)',
-          }}>
-            <div style={{ fontSize: '1.8rem', marginBottom: 8 }}>{b.icon}</div>
-            <div style={{ fontWeight: 700, fontSize: '.95rem', marginBottom: 6 }}>{b.title}</div>
-            <div style={{ fontSize: '.8rem', color: 'var(--muted)', lineHeight: 1.5 }}>{b.desc}</div>
-          </div>
-        ))}
+      {/* ── Category tabs ── */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
+        {HOBBIES.map(h => {
+          const isActive = active === h.label
+          return (
+            <button
+              key={h.label}
+              onClick={() => switchCat(h.label)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '10px 22px', borderRadius: 100,
+                fontSize: '.875rem', fontWeight: 600, cursor: 'pointer',
+                background: isActive ? 'rgba(212,168,67,0.12)' : '#1a1a1a',
+                color: isActive ? h.color : '#6E6458',
+                border: `2px solid ${isActive ? h.color : 'transparent'}`,
+                transition: 'all .2s',
+                boxShadow: isActive ? `0 4px 16px ${h.color}40` : 'none',
+                transform: isActive ? 'translateY(-1px)' : 'none',
+              }}
+            >
+              <span style={{ fontSize: '1rem' }}>{h.emoji}</span>
+              {h.label}
+            </button>
+          )
+        })}
       </div>
 
-      {/* ── Category filter ── */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-        {CATS.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setActive(cat)}
-            style={{
-              padding: '7px 18px', borderRadius: 100,
-              fontSize: '.8rem', fontWeight: 600, cursor: 'pointer',
-              background: active === cat ? CAT_COLORS[cat] : 'var(--surface)',
-              color: active === cat ? '#fff' : 'var(--muted)',
-              border: `1.5px solid ${active === cat ? CAT_COLORS[cat] : 'var(--border)'}`,
-              transition: 'all .18s',
-            }}
-          >
-            {cat === 'Art' ? '🎨 ' : cat === 'Dance' ? '💃 ' : cat === 'Life' ? '🌿 ' : ''}
-            {cat}
-          </button>
-        ))}
-      </div>
+      {/* ── Gallery ── */}
+      <div key={active} style={{ animation: 'fadeUp .35s ease both' }}>
 
-      {/* ── Grid ── */}
-      <div style={{ marginTop: 12 }}>
-        <div className="ig-grid">
-          {filtered.map(post => (
-            <div key={post.id} className="ig-post">
-              {/* Placeholder — swap for <img src={post.imageUrl} ... /> */}
-              <div className="ig-placeholder" style={{ background: post.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>
-                {post.emoji}
-              </div>
-              <div className="ig-overlay">
-                <span style={{ fontWeight: 700, fontSize: '.85rem' }}>{post.tag}</span>
-                <span>{post.caption}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4, fontWeight: 700 }}>
-                  <HeartIcon /> {post.likes}
-                </div>
-              </div>
-              {/* Category pill */}
+        {/* Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 6,
+          borderRadius: 16,
+          overflow: 'hidden',
+          marginBottom: 0,
+        }}>
+          {hobby.images.map((src, i) => (
+            <div
+              key={src}
+              onClick={() => setLightbox(i)}
+              style={{
+                position: 'relative',
+                aspectRatio: '1',
+                overflow: 'hidden',
+                cursor: 'zoom-in',
+                background: '#111',
+              }}
+            >
+              <img
+                src={src}
+                alt={`${hobby.label} ${i + 1}`}
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: 'cover', display: 'block',
+                  transition: 'transform .35s',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.07)')}
+                onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+              />
+              {/* Hover overlay */}
               <div style={{
-                position: 'absolute', top: 8, left: 8,
-                background: 'rgba(255,255,255,0.9)',
-                borderRadius: 100,
-                padding: '2px 8px',
+                position: 'absolute', inset: 0,
+                background: `${hobby.color}55`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                opacity: 0, transition: 'opacity .25s',
+              }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '0')}
+              >
+                <svg width="28" height="28" fill="none" stroke="#fff" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+              </div>
+              {/* Index pill */}
+              <div style={{
+                position: 'absolute', bottom: 8, right: 8,
+                background: 'rgba(0,0,0,.45)', color: '#fff',
                 fontSize: '.65rem', fontWeight: 700,
-                color: CAT_COLORS[post.category],
+                padding: '2px 7px', borderRadius: 100,
               }}>
-                {post.category}
+                {i + 1}/{hobby.images.length}
               </div>
             </div>
           ))}
         </div>
+
+        {/* ── Passion description box ── */}
+        <div style={{
+          marginTop: 24,
+          background: hobby.accent,
+          border: `1.5px solid ${hobby.color}30`,
+          borderRadius: 16,
+          padding: '28px 32px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+            <span style={{ fontSize: '1.5rem' }}>{hobby.emoji}</span>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: hobby.color }}>{hobby.label}</h3>
+          </div>
+          <p style={{ fontSize: '.92rem', lineHeight: 1.8, color: '#374151', marginBottom: 16 }}>
+            {hobby.passion}
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {hobby.tags.map(t => (
+              <span key={t} style={{
+                fontSize: '.75rem', fontWeight: 600,
+                padding: '4px 12px', borderRadius: 100,
+                background: `${hobby.color}18`, color: hobby.color,
+                border: `1px solid ${hobby.color}30`,
+              }}>{t}</span>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* ── Footer note ── */}
-      <div style={{ textAlign: 'center', marginTop: 40, color: 'var(--muted)', fontSize: '.85rem' }}>
-        <p>📸 Replace the gradient placeholders with your actual photos — drop them in <code>public/</code> and update each post's image src.</p>
-      </div>
+      {/* ── Avatar zoom modal ── */}
+      {avatarZoomed && (
+        <div
+          onClick={() => setAvatarZoomed(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(0,0,0,.85)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            animation: 'fadeIn .2s ease', cursor: 'zoom-out',
+          }}
+        >
+          <img
+            src={`${BASE}/aboutMe/aboutmeprofile.jpeg`}
+            alt="Vera Wen"
+            style={{
+              width: 'min(420px, 85vw)', height: 'min(420px, 85vw)',
+              borderRadius: '50%', objectFit: 'cover',
+              border: '4px solid rgba(255,255,255,.2)',
+              boxShadow: '0 32px 100px rgba(0,0,0,.7)',
+              animation: 'fadeUp .25s ease',
+            }}
+          />
+          <button
+            onClick={() => setAvatarZoomed(false)}
+            style={{
+              position: 'fixed', top: 20, right: 20,
+              width: 40, height: 40, borderRadius: '50%',
+              background: 'rgba(255,255,255,.15)', border: 'none',
+              color: '#fff', cursor: 'pointer', fontSize: '1.1rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >✕</button>
+        </div>
+      )}
+
+      {/* ── Lightbox ── */}
+      {lightbox !== null && (
+        <div
+          onClick={() => setLightbox(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(0,0,0,.88)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            animation: 'fadeIn .2s ease',
+          }}
+        >
+          {/* Prev */}
+          <button
+            onClick={e => { e.stopPropagation(); setLightbox(i => Math.max((i ?? 0) - 1, 0)) }}
+            disabled={lightbox === 0}
+            style={{
+              position: 'fixed', left: 24, top: '50%', transform: 'translateY(-50%)',
+              width: 48, height: 48, borderRadius: '50%',
+              background: lightbox === 0 ? 'rgba(255,255,255,.1)' : 'rgba(255,255,255,.2)',
+              border: 'none', color: '#fff', cursor: lightbox === 0 ? 'default' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1.3rem', transition: 'background .15s',
+            }}
+          >‹</button>
+
+          {/* Image + caption */}
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              maxWidth: '80vw', maxHeight: '90vh', gap: 20,
+            }}
+          >
+            <img
+              key={lightbox}
+              src={hobby.images[lightbox]}
+              alt={`${hobby.label} ${lightbox + 1}`}
+              style={{
+                maxWidth: '100%', maxHeight: '72vh',
+                objectFit: 'contain', borderRadius: 12,
+                boxShadow: '0 24px 80px rgba(0,0,0,.6)',
+                animation: 'fadeIn .2s ease',
+              }}
+            />
+            {/* Caption strip */}
+            <div style={{
+              background: 'rgba(255,255,255,.08)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255,255,255,.15)',
+              borderRadius: 12, padding: '14px 24px',
+              display: 'flex', alignItems: 'center', gap: 12,
+              color: '#fff',
+            }}>
+              <span style={{ fontSize: '1.2rem' }}>{hobby.emoji}</span>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: '.9rem' }}>{hobby.label} — {lightbox + 1} of {hobby.images.length}</div>
+                <div style={{ fontSize: '.78rem', color: 'rgba(255,255,255,.6)', marginTop: 2 }}>
+                  Press ← → to navigate · ESC to close
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Next */}
+          <button
+            onClick={e => { e.stopPropagation(); setLightbox(i => Math.min((i ?? 0) + 1, hobby.images.length - 1)) }}
+            disabled={lightbox === hobby.images.length - 1}
+            style={{
+              position: 'fixed', right: 24, top: '50%', transform: 'translateY(-50%)',
+              width: 48, height: 48, borderRadius: '50%',
+              background: lightbox === hobby.images.length - 1 ? 'rgba(255,255,255,.1)' : 'rgba(255,255,255,.2)',
+              border: 'none', color: '#fff', cursor: lightbox === hobby.images.length - 1 ? 'default' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1.3rem', transition: 'background .15s',
+            }}
+          >›</button>
+
+          {/* Close */}
+          <button
+            onClick={() => setLightbox(null)}
+            style={{
+              position: 'fixed', top: 20, right: 20,
+              width: 40, height: 40, borderRadius: '50%',
+              background: 'rgba(255,255,255,.15)', border: 'none',
+              color: '#fff', cursor: 'pointer', fontSize: '1.1rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >✕</button>
+
+          {/* Dot indicators */}
+          <div style={{
+            position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+            display: 'flex', gap: 6,
+          }}>
+            {hobby.images.map((_, i) => (
+              <div
+                key={i}
+                onClick={e => { e.stopPropagation(); setLightbox(i) }}
+                style={{
+                  width: i === lightbox ? 20 : 8,
+                  height: 8, borderRadius: 4,
+                  background: i === lightbox ? '#fff' : 'rgba(255,255,255,.35)',
+                  cursor: 'pointer',
+                  transition: 'all .2s',
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <style>{`@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } } @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }`}</style>
     </div>
   )
 }

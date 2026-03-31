@@ -18,7 +18,7 @@ function SaikawaGallery({ color, statusColor, status }: { color: string; statusC
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
+      background: 'linear-gradient(135deg, #0f0f0f 0%, #181510 100%)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       gap: 14, padding: '32px 24px', position: 'relative', overflow: 'hidden',
@@ -29,7 +29,7 @@ function SaikawaGallery({ color, statusColor, status }: { color: string; statusC
         borderRadius: 16,
         overflow: 'hidden',
         boxShadow: `0 16px 40px ${color}40`,
-        background: '#fff',
+        background: '#111',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <img
@@ -43,8 +43,8 @@ function SaikawaGallery({ color, statusColor, status }: { color: string; statusC
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <button onClick={prev} style={{
           width: 32, height: 32, borderRadius: '50%', border: `1.5px solid ${color}40`,
-          background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color, boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          background: '#1a1a1a', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color, boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
         }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
@@ -63,8 +63,8 @@ function SaikawaGallery({ color, statusColor, status }: { color: string; statusC
 
         <button onClick={next} style={{
           width: 32, height: 32, borderRadius: '50%', border: `1.5px solid ${color}40`,
-          background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color, boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          background: '#1a1a1a', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color, boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
         }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
@@ -107,12 +107,12 @@ const PROJECTS = [
       'MySQL',
       'Swagger/OpenAPI'
     ],
-    color: '#0369a1',
-    gradient: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
-    accentGradient: 'linear-gradient(135deg, #0369a1, #38bdf8)',
+    color: '#D4A843',
+    gradient: 'linear-gradient(135deg, #141414 0%, #1a1a1a 100%)',
+    accentGradient: 'linear-gradient(135deg, #A07828, #D4A843, #F5DFA0)',
     demo: 'https://drive.google.com/file/d/1cK4vOXYUMuMfadp8ABI2ZVHiUX6xDLVj/view?usp=sharing',
     status: 'In Apple Store Review Process',
-    statusColor: '#059669',
+    statusColor: '#D4A843',
   },
 
   {
@@ -142,14 +142,14 @@ const PROJECTS = [
     ],
     impact:
       'Combined AI agent architecture with full-stack system design to build a scalable healthcare platform focused on real-world patient support.',
-    color: '#7c3aed',
-    gradient: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)',
-    accentGradient: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
+    color: '#D4A843',
+    gradient: 'linear-gradient(135deg, #141414 0%, #1c1a14 100%)',
+    accentGradient: 'linear-gradient(135deg, #A07828, #D4A843, #F5DFA0)',
     emoji: '⚕️',
     github: 'https://github.com/',
     demo: '#',
     status: 'In Development',
-    statusColor: '#7c3aed',
+    statusColor: '#A07828',
   },
 ]
 function TechBadge({ label, color }: { label: string; color: string }) {
@@ -238,7 +238,7 @@ export default function Projects() {
                 {/* Highlights */}
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
                   {p.highlights.map(h => (
-                    <li key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '.875rem', color: '#374151' }}>
+                    <li key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '.875rem', color: '#B0A898' }}>
                       <span style={{
                         width: 18, height: 18, borderRadius: '50%',
                         background: p.accentGradient,

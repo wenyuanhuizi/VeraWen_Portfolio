@@ -21,8 +21,8 @@ const HOBBIES: HobbyData[] = [
     color: '#D4A843',
     accent: 'rgba(212,168,67,0.06)',
     images: ['dance1.jpeg', 'dance2.jpeg', 'dance3.jpeg', 'dance4.jpeg'].map(f => `${BASE}/hobby/dance/${f}`),
-    passion: `Dance is one of my deepest passions — it's the language I speak when words aren't enough. Whether it's the precision of choreography or the freedom of freestyle, every style teaches me something new about myself. I've performed in cultural showcases, hip-hop events, and contemporary pieces, and each experience pushes me to connect more deeply with both the music and the audience. Movement is where I find flow.`,
-    tags: ['#contemporary', '#hiphop', '#freestyle', '#performance'],
+    passion: `Dance has been one of my deepest passions since I was seven, when I began training in Latin and ballroom. Throughout my teenage years, I developed as a semi-professional dancer, competing in numerous international, national, and local competitions. In college, I expanded into hip-hop, jazz, and contemporary styles, further broadening my range. Dance has always been my way to relieve stress, and choreography is how I express myself creatively. It has also allowed me to connect with new people, making it a core part of who I am.`,
+    tags: ['#latin', '#hiphop', '#freestyle', '#performance'],
   },
   {
     label: 'Painting',
@@ -30,8 +30,8 @@ const HOBBIES: HobbyData[] = [
     color: '#F5DFA0',
     accent: 'rgba(245,223,160,0.06)',
     images: ['painting1.jpeg', 'painting2.jpeg', 'painting3.jpeg', 'painting4.jpeg'].map(f => `${BASE}/hobby/painting/${f}`),
-    passion: `Painting is my meditation. I'm drawn to watercolour for its unpredictability — the way pigment bleeds into water feels like a conversation rather than a command. I love experimenting with negative space, layering soft washes to build depth, and finding the balance between intention and happy accident. Each piece is a little world I get to step into and explore.`,
-    tags: ['#watercolour', '#illustration', '#botanicalart', '#expressionism'],
+    passion: `The pictures above show oil paintings I created and displayed on the wall of my dorm. The first three are my favorites—each one captures the emotions and stories I experienced at the moment of painting. I approach painting intuitively, using it as a channel to record and express my feelings; colors and shapes come naturally to me. The process of translating abstract thoughts into a clear, tangible form closely mirrors how I approach problem-solving in technical work. At the core of both is the same motivation—I’m drawn to creating things that are both meaningful and beautiful.`,
+    tags: ['#illustration', '#botanicalart', '#expressionism'],
   },
   {
     label: 'Sculpture',
@@ -39,7 +39,7 @@ const HOBBIES: HobbyData[] = [
     color: '#A07828',
     accent: 'rgba(160,120,40,0.08)',
     images: ['sculpture1.jpeg','sculpture2.jpeg','sculpture3.jpeg','sculpture4.jpeg','sculpture5.jpeg','sculpture6.jpeg','sculpture7.jpeg'].map(f => `${BASE}/hobby/sculpture/${f}`),
-    passion: `Sculpture gives me something that 2D art never quite does — a physical presence you can walk around, touch, and experience from every angle. Working with clay grounds me in a way that's hard to describe. I love the intimacy of shaping something with my hands, feeling the material push back. It's humbling, tactile, and endlessly surprising. My pieces tend to blend organic form with abstract emotion.`,
+    passion: `Sculpture is an unexpected passion I discovered through an introductory course at Emory. Compared to painting, it feels more tangible—I enjoy working with physical materials like plaster, wood, and found objects from everyday life. The critique sessions in this course, where I presented my work to classmates, pushed me to think more deeply about what I was trying to express. It challenged me to articulate the intent behind my creations, not just make them. At the same time, I found a strong sense of satisfaction in seeing my work displayed, knowing it carried both a physical presence and a clear idea behind it.`,
     tags: ['#ceramics', '#clay', '#3dart', '#handbuilt'],
   },
   {
@@ -48,7 +48,7 @@ const HOBBIES: HobbyData[] = [
     color: '#C8A050',
     accent: 'rgba(200,160,80,0.06)',
     images: ['sport1.jpeg','sport2.jpeg','sport3.jpeg','sport4.jpeg','sport5.jpeg','sport6.jpeg','sport7.jpeg'].map(f => `${BASE}/hobby/sports/${f}`),
-    passion: `Sport is my reset button. It clears the mental clutter that builds up after long coding sessions and fills me with a different kind of energy — physical, competitive, and communal. I believe that athletic discipline directly sharpens my focus as a developer. Whether it's pushing through a tough run or playing as part of a team, sport teaches me grit, consistency, and the value of showing up even when it's hard.`,
+    passion: `Sports are another core part of my identity. I draw a lot of inspiration not just from watching games, but from learning the behind-the-scenes stories of different athletes—their discipline, mindset, and journeys. The pictures above capture games I attended in person, including NBA matchups featuring the Lakers, Thunder, and Hawks, as well as NFL Falcons and MLB Yankees games in Atlanta. Beyond being a spectator, I also enjoy playing tennis and golf, which give me a more personal connection to the discipline and focus that sports require.`,
     tags: ['#athletics', '#teamwork', '#active', '#mindandbody'],
   },
 ]
@@ -221,7 +221,7 @@ export default function AboutMe() {
             <span style={{ fontSize: '1.5rem' }}>{hobby.emoji}</span>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: hobby.color }}>{hobby.label}</h3>
           </div>
-          <p style={{ fontSize: '.92rem', lineHeight: 1.8, color: '#374151', marginBottom: 16 }}>
+          <p style={{ fontSize: '.92rem', lineHeight: 1.8, color: '#D6CFC4', marginBottom: 16 }}>
             {hobby.passion}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>

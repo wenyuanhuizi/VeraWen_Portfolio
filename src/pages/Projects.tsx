@@ -110,24 +110,26 @@ const PROJECTS = [
     color: '#D4A843',
     gradient: 'linear-gradient(135deg, #141414 0%, #1a1a1a 100%)',
     accentGradient: 'linear-gradient(135deg, #A07828, #D4A843, #F5DFA0)',
-    demo: 'https://drive.google.com/file/d/1cK4vOXYUMuMfadp8ABI2ZVHiUX6xDLVj/view?usp=sharing',
-    status: 'In Apple Store Review Process',
+    appLink: 'https://apps.apple.com/us/app/saikawa-lab/id6742509481',
+    status: 'Downloadable from App Store',
     statusColor: '#D4A843',
   },
 
   {
-    id: 'medease',
-    name: 'MedEase',
-    tagline: 'An AI-powered aftercare agent for patient support and coordination.',
+    id: 'aceso',
+    name: 'Aceso.ai',
+    tagline: 'An agentic AI health manager for personalized, continuous wellness and care.',
+
     description:
-      'MedEase is an AI-driven platform designed to simplify post-treatment care by helping patients understand medical information and manage next steps. I founded and led the development of the system, designing end-to-end architecture and building backend services that integrate LLMs, real-time communication, and external healthcare workflows.',
+      'Aceso is an AI-native health management platform that provides every user with a personalized AI health manager. Built around persistent agentic AI, the platform helps individuals navigate their health journeys—from post-operative recovery and chronic condition management to preventive wellness, fitness, and long-term health optimization. As founder and lead engineer, I designed the end-to-end system architecture, built scalable backend infrastructure, and developed AI-powered workflows that coordinate healthcare tasks, interpret medical information, and deliver personalized support.',
+
     highlights: [
-      'Designed and implemented backend architecture using FastAPI with 40+ RESTful APIs',
-      'Built AI pipelines for medical report simplification using GPT-4o, T5-Large, and DeepSeek',
-      'Developed real-time medication assistance agent with WebSocket-based interaction',
-      'Integrated external services (Google Calendar, Maps, Gmail) via OAuth 2.0',
-      'Orchestrated multi-service workflows to support patient aftercare coordination',
-      'Led a team of 3 engineers, managing agile sprints and iterative product delivery',
+      'Founded and architected an agentic AI platform for personalized health management and continuous care',
+      'Designed and implemented a FastAPI backend with 40+ RESTful APIs integrating MongoDB, AWS S3, and Swagger',
+      'Built AI agent workflows using GPT-4o mini for conversational health assistance, medication guidance, and proactive task management',
+      'Engineered a multi-stage medical report interpretation pipeline using GPT-4o, T5-Large, and DeepSeek',
+      'Developed real-time communication between users and AI agents with React, WebSockets, and streaming responses',
+      'Integrated Google Calendar, Gmail, and Maps APIs via OAuth 2.0 to automate scheduling, reminders, caregiver coordination, and location-aware healthcare resources',
     ],
     tech: [
       'FastAPI',
@@ -146,8 +148,7 @@ const PROJECTS = [
     gradient: 'linear-gradient(135deg, #141414 0%, #1c1a14 100%)',
     accentGradient: 'linear-gradient(135deg, #A07828, #D4A843, #F5DFA0)',
     emoji: '⚕️',
-    github: 'https://github.com/',
-    demo: '#',
+    appLink: 'https://aceso-9bb.pages.dev/',
     status: 'In Development',
     statusColor: '#A07828',
   },
@@ -261,10 +262,10 @@ export default function Projects() {
 
                 {/* Links */}
                 <div style={{ display: 'flex', gap: 12 }}>
-                  {p.demo !== '#' && (
-                    <a href={p.demo} target="_blank" rel="noopener noreferrer" className="btn btn-primary"
+                  {p.appLink !== '#' && (
+                    <a href={p.appLink} target="_blank" rel="noopener noreferrer" className="btn btn-primary"
                       style={{ background: p.accentGradient, fontSize: '.8rem', padding: '8px 18px' }}>
-                      Live Demo ↗
+                      {p.id === 'saikawa' ? 'View on App Store ↗' : 'Live Demo ↗'}
                     </a>
                   )}
                 </div>
